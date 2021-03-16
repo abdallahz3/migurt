@@ -1,16 +1,14 @@
 #!/usr/bin/env node
 
 const _includes = require("lodash/includes");
-const program = require("commander");
+const { Command } = require("commander");
 const Log = require("logurt");
 const RunSeeds = require("../interactors/RunSeeds");
 const { Pool } = require("pg");
 const { DATABASE_URL } = require("../helpers/env");
-console.log("dfsdf", process.argv)
 
-
-program
-  .option("--number", "The number of seeds to run.")
+const program = new Command();
+program.option('-n, --number <type>', "The number of seeds to run.")
   .parse(process.argv);
 
 async function perform({ inputNumber }) {
@@ -18,7 +16,6 @@ async function perform({ inputNumber }) {
 
   const pool = new Pool({ connectionString: DATABASE_URL });
   const dbClient = await pool.connect();
-
   if (inputNumber > 0) await RunSeeds.perform({ dbClient, inputNumber });
 
   dbClient.release();
