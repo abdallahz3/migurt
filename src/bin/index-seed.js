@@ -6,9 +6,11 @@ const Log = require("logurt");
 const RunSeeds = require("../interactors/RunSeeds");
 const { Pool } = require("pg");
 const { DATABASE_URL } = require("../helpers/env");
+console.log("dfsdf", process.argv)
+
 
 program
-  .option("-n, --number <n>", "The number of seeds to run.", parseInt)
+  .option("--number", "The number of seeds to run.")
   .parse(process.argv);
 
 async function perform({ inputNumber }) {
@@ -32,4 +34,4 @@ function validateInput({ inputNumber }) {
   program.help();
 }
 
-perform({ inputNumber: program.number });
+perform({ inputNumber: parseInt(program.opts().number) });
