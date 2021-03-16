@@ -1,15 +1,16 @@
 #!/usr/bin/env node
 
 const _includes = require("lodash/includes");
-const program = require("commander");
+const { Command } = require("commander");
 const Log = require("logurt");
 const RunMigrations = require("../interactors/RunMigrations");
 const { Pool } = require("pg");
 const { DATABASE_URL } = require("../helpers/env");
 
-program
-  .option("-n, --number <n>", "The number of migrations to run.", parseInt)
+const program = new Command();
+program.option('-n, --number <type>', "The number of migrations to run.")
   .parse(process.argv);
+
 
 async function perform({ inputNumber }) {
   validateInput({ inputNumber });
@@ -32,4 +33,4 @@ function validateInput({ inputNumber }) {
   program.help();
 }
 
-perform({ inputNumber: program.number });
+perform({ inputNumber: parseInt(program.opts().number });
