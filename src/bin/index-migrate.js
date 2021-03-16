@@ -33,4 +33,4 @@ function validateInput({ inputNumber }) {
   program.help();
 }
 
-perform({ inputNumber: parseInt(program.opts().number });
+perform({ inputNumber: parseInt(program.opts().number) });
