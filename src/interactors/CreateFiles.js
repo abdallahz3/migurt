@@ -8,8 +8,21 @@ class CreateFiles {
     CreateDirectoriesIfNotExists.perform({ dirs: [dirUp, dirDown] });
 
     const now = Date.now();
-    const filenameUp = `${dirUp}/${now}_${name}.sql`;
-    const filenameDown = `${dirDown}/${now}_${name}.sql`;
+    let filenameUp = ''
+    let filenameDown = ''
+    if (name.endsWith('.sqlt')) {
+      filenameUp = `${dirUp}/${now}_${name}`;
+      filenameDown = `${dirDown}/${now}_${name}`;
+    } else {
+      if (name.endsWith('.sql')) {
+        filenameUp = `${dirUp}/${now}_${name}`;
+        filenameDown = `${dirDown}/${now}_${name}`;
+      } else {
+        filenameUp = `${dirUp}/${now}_${name}.sql`;
+        filenameDown = `${dirDown}/${now}_${name}.sql`;
+      }
+    }
+
 
     fs.writeFileSync(filenameUp, "");
     Log.success(`Created file ${filenameUp}`);

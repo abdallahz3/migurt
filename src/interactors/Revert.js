@@ -1,6 +1,7 @@
 const _get = require("lodash/get");
 const _reverse = require("lodash/reverse");
 const fs = require("fs");
+const template = require('es6-template-strings');
 const path = require("path");
 const Log = require("logurt");
 const { alreadyRunFileNames, getNumberToRun } = require("../helpers/utils");
@@ -26,9 +27,16 @@ class Revert {
 
       for (var i = 0; i < numToRun; i++) {
         const filename = alreadyRunFilenamesSorted[i];
-        const sql = fs.readFileSync(path.join(downDir, filename), {
+        const sqlRaw = fs.readFileSync(path.join(downDir, filename), {
           encoding: "utf-8"
         });
+
+        let sql = '';
+        if (filename.endsWith('.sqlt')) {
+          sql = template(sqlRaw, {process: process})
+        } else {
+          sql = sqlRaw
+        }
 
         await this.runReversion({ dbClient, filename, sql, tableName });
 

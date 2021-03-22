@@ -1,4 +1,5 @@
 const fs = require("fs");
+const template = require('es6-template-strings');
 const path = require("path");
 const CreateTableIfNotExists = require("./CreateTableIfNotExists");
 const FetchRemainingFilenames = require("./FetchRemainingFilenames");
@@ -38,10 +39,17 @@ class RunMigrations {
 
       for (var i = 0; i < numToRun; i++) {
         const filename = remainingFilenamesSorted[i];
-        const sql = fs.readFileSync(
+        const sqlRaw = fs.readFileSync(
           path.join(DIRECTORY_UP_MIGRATIONS, filename),
           { encoding: "utf-8" }
         );
+
+        let sql = '';
+        if (filename.endsWith('.sqlt')) {
+          sql = template(sqlRaw, {process: process})
+        } else {
+          sql = sqlRaw
+        }
 
         await this.runMigration({
           dbClient,
